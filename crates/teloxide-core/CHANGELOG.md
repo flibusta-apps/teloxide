@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `set_chat_member_tag` method
+- `MessageEntityKind::DateTime` variant
+- `sender_tag` field to `Message`
+- `tag` field to `ChatMemberKind::Member` and `ChatMemberKind::Restricted`
+- `can_edit_tag` field to `ChatMemberKind::Restricted`
+- `EDIT_TAG` flag (and `can_edit_tag()` accessor) to `ChatPermissions`
+- `can_manage_tags` field to `ChatAdministratorRights` and `ChatMemberKind::Administrator`
+- `can_manage_tags` parameter to `promote_chat_member`
 - Support for TBA 9.4
   - Add `allows_users_to_create_topics` field to `User` struct
   - Add `icon_custom_emoji_id` and `style` fields to `KeyboardButton` and `InlineKeyboardButton` structs
@@ -60,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `send_message_draft` is no longer restricted to privileged bots (TBA 9.5)
 - Support for TBA 9.2 ([#1403](https://github.com/teloxide/teloxide/pull/1403))
   - `ChatFullInfoPublicKind::Supergroup` is now of type `Box<ChatFullInfoPublicSupergroup>` instead of `ChatFullInfoPublicSupergroup` [**BC**]
 

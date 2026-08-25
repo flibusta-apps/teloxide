@@ -98,6 +98,9 @@ bitflags::bitflags! {
                                             | Self::SEND_VIDEO_NOTES.bits()
                                             | Self::SEND_VOICE_NOTES.bits();
 
+        /// Set if the user is allowed to edit their own member tag.
+        const EDIT_TAG = 1 << 14;
+
     }
 }
 
@@ -206,6 +209,13 @@ impl ChatPermissions {
     pub fn can_manage_topics(&self) -> bool {
         self.contains(ChatPermissions::MANAGE_TOPICS)
     }
+
+    /// Checks for [`EDIT_TAG`] permission.
+    ///
+    /// [`EDIT_TAG`]: ChatPermissions::EDIT_TAG
+    pub fn can_edit_tag(&self) -> bool {
+        self.contains(ChatPermissions::EDIT_TAG)
+    }
 }
 
 /// Helper for (de)serialization
@@ -257,6 +267,9 @@ struct ChatPermissionsRaw {
     //       or did they mean that `can_pin_messages` implies `can_manage_topics`?..
     #[serde(default)]
     can_manage_topics: bool,
+
+    #[serde(default, skip_serializing_if = "Not::not")]
+    can_edit_tag: bool,
 }
 
 impl From<ChatPermissions> for ChatPermissionsRaw {
@@ -276,6 +289,7 @@ impl From<ChatPermissions> for ChatPermissionsRaw {
             can_invite_users: this.can_invite_users(),
             can_pin_messages: this.can_pin_messages(),
             can_manage_topics: this.can_manage_topics(),
+            can_edit_tag: this.can_edit_tag(),
         }
     }
 }
@@ -297,6 +311,7 @@ impl From<ChatPermissionsRaw> for ChatPermissions {
             can_invite_users,
             can_pin_messages,
             can_manage_topics,
+            can_edit_tag,
         }: ChatPermissionsRaw,
     ) -> Self {
         let mut this = Self::empty();
@@ -344,6 +359,9 @@ impl From<ChatPermissionsRaw> for ChatPermissions {
         if can_manage_topics {
             this |= Self::MANAGE_TOPICS
         }
+        if can_edit_tag {
+            this |= Self::EDIT_TAG;
+        }
 
         this
     }
@@ -381,5 +399,22 @@ mod tests {
         let after = before - ChatPermissions::SEND_MESSAGES;
         let expected = ChatPermissions::SEND_PHOTOS | ChatPermissions::SEND_AUDIOS;
         assert_eq!(after, expected);
+    }
+
+    #[test]
+    fn can_edit_tag_serialization() {
+        let permissions = ChatPermissions::SEND_MESSAGES | ChatPermissions::EDIT_TAG;
+        let expected =
+            r#"{"can_send_messages":true,"can_manage_topics":false,"can_edit_tag":true}"#;
+        let actual = serde_json::to_string(&permissions).unwrap();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn can_edit_tag_deserialization() {
+        let json = r#"{"can_send_messages":true,"can_edit_tag":true}"#;
+        let expected = ChatPermissions::SEND_MESSAGES | ChatPermissions::EDIT_TAG;
+        let actual: ChatPermissions = serde_json::from_str(json).unwrap();
+        assert_eq!(expected, actual);
     }
 }

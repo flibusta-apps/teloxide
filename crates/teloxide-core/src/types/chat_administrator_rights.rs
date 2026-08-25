@@ -64,4 +64,19 @@ pub struct ChatAdministratorRights {
     /// `true`, if the administrator can manage direct messages of the channel
     /// and decline suggested posts; for channels only
     pub can_manage_direct_messages: bool,
+
+    /// `true`, if the administrator can manage member tags.
+    pub can_manage_tags: Option<bool>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ChatAdministratorRights;
+
+    #[test]
+    fn can_manage_tags_roundtrip() {
+        let json = r#"{"is_anonymous":false,"can_manage_chat":true,"can_delete_messages":false,"can_manage_video_chats":false,"can_restrict_members":false,"can_promote_members":false,"can_change_info":false,"can_invite_users":false,"can_manage_direct_messages":false,"can_manage_tags":true}"#;
+        let rights: ChatAdministratorRights = serde_json::from_str(json).unwrap();
+        assert_eq!(rights.can_manage_tags, Some(true));
+    }
 }

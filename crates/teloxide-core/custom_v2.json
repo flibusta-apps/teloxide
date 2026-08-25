@@ -1,13 +1,13 @@
 {
   "version": {
     "major": 9,
-    "minor": 4,
+    "minor": 5,
     "patch": 0
   },
   "recent_changes": {
     "year": 2026,
-    "month": 2,
-    "day": 9
+    "month": 3,
+    "day": 1
   },
   "methods": [
     {
@@ -4495,6 +4495,14 @@
           "type_info": {
             "type": "bool"
           }
+        },
+        {
+          "name": "can_manage_tags",
+          "description": "Pass *True* if the administrator can manage member tags",
+          "required": false,
+          "type_info": {
+            "type": "bool"
+          }
         }
       ],
       "maybe_multipart": false,
@@ -4553,6 +4561,54 @@
         "default": true
       },
       "documentation_link": "https://core.telegram.org/bots/api#setchatadministratorcustomtitle"
+    },
+    {
+      "name": "setChatMemberTag",
+      "description": "Use this method to set a tag for a member of a chat. Pass an empty string to remove the tag. Returns *True* on success.",
+      "arguments": [
+        {
+          "name": "chat_id",
+          "description": "Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)",
+          "required": true,
+          "type_info": {
+            "type": "any_of",
+            "any_of": [
+              {
+                "type": "integer",
+                "enumeration": []
+              },
+              {
+                "type": "string",
+                "enumeration": []
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_id",
+          "description": "Unique identifier of the target user",
+          "required": true,
+          "type_info": {
+            "type": "integer",
+            "enumeration": []
+          }
+        },
+        {
+          "name": "tag",
+          "description": "New tag for the member; 0-16 characters. Pass an empty string to remove the tag",
+          "required": false,
+          "type_info": {
+            "type": "string",
+            "enumeration": []
+          }
+        }
+      ],
+      "maybe_multipart": false,
+      "return_type": {
+        "type": "bool",
+        "default": true
+      },
+      "documentation_link": "https://core.telegram.org/bots/api#setchatmembertag"
     },
     {
       "name": "banChatSenderChat",
@@ -12732,7 +12788,8 @@
               "pre",
               "text_link",
               "text_mention",
-              "custom_emoji"
+              "custom_emoji",
+              "date_time"
             ]
           }
         },
@@ -12784,6 +12841,24 @@
         {
           "name": "custom_emoji_id",
           "description": "*Optional*. For “custom\\_emoji” only, unique identifier of the custom emoji. Use [getCustomEmojiStickers](https://core.telegram.org/bots/api#getcustomemojistickers) to get full information about the sticker",
+          "required": false,
+          "type_info": {
+            "type": "string",
+            "enumeration": []
+          }
+        },
+        {
+          "name": "unix_time",
+          "description": "*Optional*. For “date\\_time” only, point in time (Unix timestamp) that the date represents",
+          "required": false,
+          "type_info": {
+            "type": "integer",
+            "enumeration": []
+          }
+        },
+        {
+          "name": "date_time_format",
+          "description": "*Optional*. For “date\\_time” only, format in which the date and time must be shown to the user",
           "required": false,
           "type_info": {
             "type": "string",
@@ -17485,6 +17560,14 @@
           "type_info": {
             "type": "bool"
           }
+        },
+        {
+          "name": "can_manage_tags",
+          "description": "*Optional*. *True*, if the administrator can manage member tags",
+          "required": false,
+          "type_info": {
+            "type": "bool"
+          }
         }
       ],
       "documentation_link": "https://core.telegram.org/bots/api#chatadministratorrights"
@@ -18244,6 +18327,14 @@
         {
           "name": "can_manage_topics",
           "description": "*Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can\\_pin\\_messages",
+          "required": false,
+          "type_info": {
+            "type": "bool"
+          }
+        },
+        {
+          "name": "can_edit_tag",
+          "description": "*Optional*. *True*, if the user is allowed to edit their own tag",
           "required": false,
           "type_info": {
             "type": "bool"

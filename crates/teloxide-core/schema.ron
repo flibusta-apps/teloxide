@@ -40,7 +40,7 @@
 //! [github]: https://github.com/WaffleLapkin/tg-methods-schema
 
 Schema(
-    api_version: ApiVersion(ver: "9.4", date: "February 9, 2026"),
+    api_version: ApiVersion(ver: "9.5", date: "March 1, 2026"),
     methods: [
         Method(
             names: ("getUpdates", "GetUpdates", "get_updates"),
@@ -317,7 +317,7 @@ Schema(
         Method(
             names: ("sendMessageDraft", "SendMessageDraft", "send_message_draft"),
             return_ty: True,
-            doc: Doc(md: "Allows a bot to stream a message draft to a user while it's being generated, before the final message is sent. Returns True on success."),
+            doc: Doc(md: "Use this method to allow a bot to stream a message draft to a user while it's being generated, before the final message is sent. Returns True on success."),
             tg_doc: "https://core.telegram.org/bots/api#sendmessagedraft",
             tg_category: "Available methods",
             params: [
@@ -2894,6 +2894,11 @@ Schema(
                     ty: Option(bool),
                     descr: Doc(md: "Pass True if the administrator can manage direct messages within the channel and decline suggested posts; for channels only")
                 ),
+                Param(
+                    name: "can_manage_tags",
+                    ty: Option(bool),
+                    descr: Doc(md: "Pass True if the administrator can manage member tags"),
+                ),
             ],
         ),
         Method(
@@ -2917,6 +2922,30 @@ Schema(
                     name: "custom_title",
                     ty: String,
                     descr: Doc(md: "New custom title for the administrator; 0-16 characters, emoji are not allowed")
+                ),
+            ],
+        ),
+        Method(
+            names: ("setChatMemberTag", "SetChatMemberTag", "set_chat_member_tag"),
+            return_ty: True,
+            doc: Doc(md: "Use this method to set a tag for a member of a chat. Pass an empty string to remove the tag. Returns _True_ on success."),
+            tg_doc: "https://core.telegram.org/bots/api#setchatmembertag",
+            tg_category: "Available methods",
+            params: [
+                Param(
+                    name: "chat_id",
+                    ty: RawTy("Recipient"),
+                    descr: Doc(md: "Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)")
+                ),
+                Param(
+                    name: "user_id",
+                    ty: RawTy("UserId"),
+                    descr: Doc(md: "Unique identifier of the target user")
+                ),
+                Param(
+                    name: "tag",
+                    ty: Option(String),
+                    descr: Doc(md: "New tag for the member; 0-16 characters. Pass an empty string to remove the tag")
                 ),
             ],
         ),

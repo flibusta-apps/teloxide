@@ -175,6 +175,9 @@ pub struct MessageCommon {
     /// title of an anonymous group administrator.
     pub author_signature: Option<String>,
 
+    /// The sender's tag or custom title in supergroups.
+    pub sender_tag: Option<String>,
+
     /// The number of Telegram Stars that were paid by the sender of the message
     /// to send it
     pub paid_star_count: Option<u32>,
@@ -1059,6 +1062,14 @@ mod getters {
         pub fn author_signature(&self) -> Option<&str> {
             match &self.kind {
                 Common(MessageCommon { author_signature, .. }) => author_signature.as_deref(),
+                _ => None,
+            }
+        }
+
+        #[must_use]
+        pub fn sender_tag(&self) -> Option<&str> {
+            match &self.kind {
+                Common(MessageCommon { sender_tag, .. }) => sender_tag.as_deref(),
                 _ => None,
             }
         }
@@ -2884,6 +2895,13 @@ mod tests {
         let json = r#"{"chat":{"id":-1001847508954,"is_forum":true,"title":"twest","type":"supergroup"},"date":1675229140,"from":{"first_name":"вафель'","id":1253681278,"is_bot":false,"language_code":"en","username":"wafflelapkin"},"is_topic_message":true,"message_id":5,"message_thread_id":4,"reply_to_message":{"chat":{"id":-1001847508954,"is_forum":true,"title":"twest","type":"supergroup"},"date":1675229139,"forum_topic_created":{"icon_color":9367192,"icon_custom_emoji_id":"5312536423851630001","name":"???"},"from":{"first_name":"вафель'","id":1253681278,"is_bot":false,"language_code":"en","username":"wafflelapkin"},"is_topic_message":true,"message_id":4,"message_thread_id":4},"text":"blah"}"#;
 
         let _: Message = serde_json::from_str(json).unwrap();
+    }
+
+    #[test]
+    fn sender_tag() {
+        let json = r#"{"chat":{"id":-1001847508954,"is_forum":true,"title":"twest","type":"supergroup"},"date":1675229140,"from":{"first_name":"a","id":1253681278,"is_bot":false,"username":"a"},"message_id":5,"sender_tag":"vip","text":"hi"}"#;
+        let message: Message = serde_json::from_str(json).unwrap();
+        assert_eq!(message.sender_tag(), Some("vip"));
     }
 
     /// Regression test for <https://github.com/teloxide/teloxide/issues/873>

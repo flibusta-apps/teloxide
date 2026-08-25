@@ -268,6 +268,7 @@ pub enum MessageEntityKind {
     TextLink { url: reqwest::Url },
     TextMention { user: User },
     CustomEmoji { custom_emoji_id: CustomEmojiId },
+    DateTime { unix_time: Option<i64>, date_time_format: Option<String> },
 }
 
 #[cfg(test)]
@@ -353,6 +354,41 @@ mod tests {
             .unwrap()
             .find("language"),
             None
+        );
+    }
+
+    // https://core.telegram.org/bots/api-changelog#march-1-2026
+    #[test]
+    fn date_time() {
+        use serde_json::from_str;
+
+        assert_eq!(
+            MessageEntity {
+                kind: MessageEntityKind::DateTime {
+                    unix_time: Some(1772323200),
+                    date_time_format: Some("DD MMM YYYY".to_string()),
+                },
+                offset: 0,
+                length: 10,
+            },
+            from_str::<MessageEntity>(
+                r#"{"type":"date_time","offset":0,"length":10,"unix_time":1772323200,"date_time_format":"DD MMM YYYY"}"#
+            )
+            .unwrap()
+        );
+    }
+
+    #[test]
+    fn date_time_without_optional_fields() {
+        use serde_json::from_str;
+
+        assert_eq!(
+            MessageEntity {
+                kind: MessageEntityKind::DateTime { unix_time: None, date_time_format: None },
+                offset: 5,
+                length: 3,
+            },
+            from_str::<MessageEntity>(r#"{"type":"date_time","offset":5,"length":3}"#).unwrap()
         );
     }
 

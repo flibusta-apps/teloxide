@@ -119,6 +119,10 @@ pub struct Administrator {
     #[serde(default)]
     pub can_manage_direct_messages: bool,
 
+    /// `true`, if the administrator can manage member tags.
+    #[serde(default)]
+    pub can_manage_tags: bool,
+
     /// `true` if the administrator can add new administrators with a subset of
     /// his own privileges or demote administrators that he has promoted,
     /// directly or indirectly (promoted by administrators that were appointed
@@ -134,6 +138,9 @@ pub struct Administrator {
 pub struct Member {
     /// Date when the user's subscription will expire
     pub until_date: Option<UntilDate>,
+
+    /// The member's tag.
+    pub tag: Option<String>,
 }
 
 /// User, restricted in the group. This struct is part of the [`ChatMemberKind`]
@@ -194,6 +201,12 @@ pub struct Restricted {
 
     /// `true` if the user is allowed to send polls.
     pub can_send_polls: bool,
+
+    /// The member's tag.
+    pub tag: Option<String>,
+
+    /// `true` if the user is allowed to edit their own tag.
+    pub can_edit_tag: Option<bool>,
 }
 
 /// User that was banned in the chat and can't return to it or view chat
@@ -750,6 +763,7 @@ mod tests {
                 can_pin_messages: true,
                 can_promote_members: true,
                 can_manage_direct_messages: true,
+                can_manage_tags: false,
                 can_manage_topics: false,
             }),
         };
@@ -819,9 +833,50 @@ mod tests {
                 until_date: UntilDate::Date(
                     chrono::DateTime::from_timestamp(1620000000, 0).unwrap(),
                 ),
+                tag: None,
+                can_edit_tag: None,
             }),
         };
         let actual = serde_json::from_str::<ChatMember>(json).unwrap();
         assert_eq!(actual, expected)
+    }
+
+    #[test]
+    fn member_tag() {
+        let json =
+            r#"{"status":"member","user":{"id":1,"is_bot":false,"first_name":"a"},"tag":"vip"}"#;
+        let member: ChatMember = serde_json::from_str(json).unwrap();
+        assert_eq!(
+            member.kind,
+            ChatMemberKind::Member(Member { until_date: None, tag: Some("vip".to_string()) })
+        );
+    }
+
+    #[test]
+    fn member_without_tag() {
+        let json = r#"{"status":"member","user":{"id":1,"is_bot":false,"first_name":"a"}}"#;
+        let member: ChatMember = serde_json::from_str(json).unwrap();
+        assert_eq!(member.kind, ChatMemberKind::Member(Member { until_date: None, tag: None }));
+    }
+
+    #[test]
+    fn restricted_tag_and_can_edit_tag() {
+        let json = r#"{"status":"restricted","user":{"id":1,"is_bot":false,"first_name":"a"},"is_member":true,"can_send_messages":true,"can_send_audios":true,"can_send_documents":true,"can_send_photos":true,"can_send_videos":true,"can_send_video_notes":true,"can_send_voice_notes":true,"can_send_other_messages":true,"can_add_web_page_previews":true,"can_change_info":true,"can_invite_users":true,"can_pin_messages":true,"can_manage_topics":true,"can_send_polls":true,"until_date":0,"tag":"vip","can_edit_tag":true}"#;
+        let member: ChatMember = serde_json::from_str(json).unwrap();
+        let ChatMemberKind::Restricted(restricted) = member.kind else {
+            panic!("expected Restricted");
+        };
+        assert_eq!(restricted.tag, Some("vip".to_string()));
+        assert_eq!(restricted.can_edit_tag, Some(true));
+    }
+
+    #[test]
+    fn administrator_can_manage_tags() {
+        let json = r#"{"status":"administrator","user":{"id":1,"is_bot":false,"first_name":"a"},"can_be_edited":true,"is_anonymous":false,"can_manage_chat":true,"can_delete_messages":false,"can_manage_video_chats":false,"can_restrict_members":false,"can_promote_members":false,"can_change_info":false,"can_invite_users":false,"can_manage_tags":true}"#;
+        let member: ChatMember = serde_json::from_str(json).unwrap();
+        let ChatMemberKind::Administrator(admin) = member.kind else {
+            panic!("expected Administrator");
+        };
+        assert!(admin.can_manage_tags);
     }
 }

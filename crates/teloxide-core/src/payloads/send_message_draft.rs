@@ -5,7 +5,7 @@ use serde::Serialize;
 use crate::types::{ChatId, MessageEntity, ParseMode, ThreadId, True};
 
 impl_payload! {
-    /// Allows a bot to stream a message draft to a user while it's being generated, before the final message is sent. Returns True on success.
+    /// Use this method to allow a bot to stream a message draft to a user while it's being generated, before the final message is sent. Returns True on success.
     #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize)]
     pub SendMessageDraft (SendMessageDraftSetters) => True {
         required {
