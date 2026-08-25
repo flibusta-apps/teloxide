@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::types::{
     AcceptedGiftTypes, Birthdate, BusinessIntro, BusinessLocation, BusinessOpeningHours, Chat,
-    ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds, User,
+    ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds,
+    UniqueGiftColors, User, UserRating,
 };
 
 /// Custom emoji identifier.
@@ -59,6 +60,17 @@ pub struct ChatFullInfo {
     /// Information about types of gifts that are accepted by the chat or by the
     /// corresponding user for private chats
     pub accepted_gift_types: AcceptedGiftTypes,
+
+    /// For private chats, the rating of the user if any
+    pub rating: Option<UserRating>,
+
+    /// The number of Telegram Stars a general user have to pay to send a
+    /// message to the chat
+    pub paid_message_star_count: Option<u32>,
+
+    /// The color scheme based on a unique gift that must be used for the chat's
+    /// name, message replies and link previews
+    pub unique_gift_colors: Option<UniqueGiftColors>,
 
     /// Identifier of the accent color for the chat name and backgrounds of the
     /// chat photo, reply header, and link preview. See [accent colors] for more
@@ -745,7 +757,11 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: false,
             },
+            rating: None,
+            paid_message_star_count: None,
+            unique_gift_colors: None,
             accent_color_id: 0,
             background_custom_emoji_id: None,
             profile_accent_color_id: None,
@@ -807,7 +823,11 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: false,
             },
+            rating: None,
+            paid_message_star_count: None,
+            unique_gift_colors: None,
             accent_color_id: 0,
             background_custom_emoji_id: None,
             profile_accent_color_id: None,
@@ -867,7 +887,11 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: false,
             },
+            rating: None,
+            paid_message_star_count: None,
+            unique_gift_colors: None,
             accent_color_id: 0,
             background_custom_emoji_id: None,
             profile_accent_color_id: None,

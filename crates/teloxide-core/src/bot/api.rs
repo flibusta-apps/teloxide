@@ -58,6 +58,19 @@ impl Requester for Bot {
         Self::SendMessage::new(self.clone(), payloads::SendMessage::new(chat_id, text))
     }
 
+    type SendMessageDraft = JsonRequest<payloads::SendMessageDraft>;
+
+    fn send_message_draft<C, T>(&self, chat_id: C, draft_id: i64, text: T) -> Self::SendMessageDraft
+    where
+        C: Into<ChatId>,
+        T: Into<String>,
+    {
+        Self::SendMessageDraft::new(
+            self.clone(),
+            payloads::SendMessageDraft::new(chat_id, draft_id, text),
+        )
+    }
+
     type ForwardMessage = JsonRequest<payloads::ForwardMessage>;
 
     fn forward_message<C, F>(
@@ -1726,6 +1739,21 @@ impl Requester for Bot {
         )
     }
 
+    type GetUserGifts = JsonRequest<payloads::GetUserGifts>;
+
+    fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts {
+        Self::GetUserGifts::new(self.clone(), payloads::GetUserGifts::new(user_id))
+    }
+
+    type GetChatGifts = JsonRequest<payloads::GetChatGifts>;
+
+    fn get_chat_gifts<C>(&self, chat_id: C) -> Self::GetChatGifts
+    where
+        C: Into<Recipient>,
+    {
+        Self::GetChatGifts::new(self.clone(), payloads::GetChatGifts::new(chat_id))
+    }
+
     type ConvertGiftToStars = JsonRequest<payloads::ConvertGiftToStars>;
 
     fn convert_gift_to_stars(
@@ -1766,6 +1794,29 @@ impl Requester for Bot {
         Self::TransferGift::new(
             self.clone(),
             payloads::TransferGift::new(business_connection_id, owned_gift_id, new_owner_chat_id),
+        )
+    }
+
+    type RepostStory = JsonRequest<payloads::RepostStory>;
+
+    fn repost_story<F>(
+        &self,
+        business_connection_id: BusinessConnectionId,
+        from_chat_id: F,
+        from_story_id: StoryId,
+        active_period: Seconds,
+    ) -> Self::RepostStory
+    where
+        F: Into<Recipient>,
+    {
+        Self::RepostStory::new(
+            self.clone(),
+            payloads::RepostStory::new(
+                business_connection_id,
+                from_chat_id,
+                from_story_id,
+                active_period,
+            ),
         )
     }
 

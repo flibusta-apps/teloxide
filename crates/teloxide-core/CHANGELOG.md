@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for TBA 9.3
+  - Add `has_topics_enabled` field to `User` struct
+  - Add `send_message_draft` method
+  - Add `is_name_implicit` field to `ForumTopic` and `ForumTopicCreated` structs
+  - Add `get_user_gifts` and `get_chat_gifts` methods
+  - Add `GiftedUpgrade` and `Offer` variants to `UniqueGiftOrigin` enum
+  - Replace `last_resale_star_count` field with `last_resale_currency` and `last_resale_amount` fields on `UniqueGiftInfo` struct [**BC**]
+  - Add `gift_upgrade_sent` field to `Message` struct
+  - Add `UniqueGiftColors` struct, and `colors` field to `UniqueGift` struct
+  - Add `GiftBackground` struct, and `background` field to `Gift` struct
+  - Add `UserRating` struct, and `rating` field to `ChatFullInfo` struct
+  - Add `completed_by_chat` field to `ChecklistTask` struct
+  - Add `paid_message_star_count` and `unique_gift_colors` fields to `ChatFullInfo` struct
+  - Add `message_effect_id` parameter to `forward_message` and `copy_message` methods
+  - Add `gift_id` (now required), `is_from_blockchain`, `is_premium` fields to `UniqueGift` struct [**BC**: `gift_id` changed from absent to required]
+  - Add `personal_total_count`, `personal_remaining_count`, `is_premium`, `has_colors`, `background`, `unique_gift_variant_count` fields to `Gift` struct
+  - Add `is_upgrade_separate` and `unique_gift_number` fields to `GiftInfo` and `OwnedGiftRegular` structs
+  - Add `gifts_from_channels` field to `AcceptedGiftTypes` struct
+  - Add `repost_story` method
+  - Replace `exclude_limited` parameter with `exclude_limited_upgradable` and `exclude_limited_non_upgradable` parameters, and add `exclude_from_blockchain` parameter to `get_business_account_gifts` method [**BC**]
 - Support for TBA 9.2 ([#1403](https://github.com/teloxide/teloxide/pull/1403))
   - Add `checklist_task_id` field to `ReplyParameters` struct
   - Add `reply_to_checklist_task_id` field to `Message` struct

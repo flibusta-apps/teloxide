@@ -3,6 +3,32 @@ Note that the list of required changes is not fully exhaustive and it may lack s
 
 ## unreleased
 
+### teloxide-core
+
+TBA 9.3 replaced the `last_resale_star_count` field of `UniqueGiftInfo` with `last_resale_currency` and `last_resale_amount`:
+
+```diff
+-let price = unique_gift_info.last_resale_star_count;
++let currency = unique_gift_info.last_resale_currency;
++let amount = unique_gift_info.last_resale_amount;
+```
+
+TBA 9.3 made the `gift_id` field of `UniqueGift` required (it was not present on the struct before):
+
+```diff
+-// `gift_id` did not exist before
++let gift_id = unique_gift.gift_id;
+```
+
+TBA 9.3 replaced the `exclude_limited` parameter of `get_business_account_gifts` with `exclude_limited_upgradable` and `exclude_limited_non_upgradable`:
+
+```diff
+-bot.get_business_account_gifts(business_connection_id).exclude_limited(true)
++bot.get_business_account_gifts(business_connection_id)
++    .exclude_limited_upgradable(true)
++    .exclude_limited_non_upgradable(true)
+```
+
 ## 0.16 -> 0.17
 
 ### teloxide

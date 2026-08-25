@@ -17,4 +17,8 @@ pub struct AcceptedGiftTypes {
 
     /// `true`, if a Telegram Premium subscription is accepted
     pub premium_subscription: bool,
+
+    /// `true`, if the user accepts gifts from channels
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub gifts_from_channels: bool,
 }

@@ -13,6 +13,10 @@ pub struct ForumTopicCreated {
     /// Name of the topic.
     pub name: String,
 
+    /// `true`, if the name of the topic wasn't explicitly given by the user.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_name_implicit: bool,
+
     /// Color of the topic icon in RGB format.
     pub icon_color: Rgb,
 

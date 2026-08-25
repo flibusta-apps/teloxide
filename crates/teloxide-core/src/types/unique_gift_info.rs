@@ -10,13 +10,20 @@ pub struct UniqueGiftInfo {
     /// Information about the gift
     pub gift: UniqueGift,
 
-    /// Origin of the gift. Currently, either `Upgrade` for gifts upgraded from
-    /// regular gifts, `Transfer` for gifts transferred from other users or
-    /// channels, or `Resale` for gifts bought from other users
+    /// Origin of the gift. Currently, either `upgrade` for gifts upgraded from
+    /// regular gifts, `transfer` for gifts transferred from other users or
+    /// channels, `resale` for gifts bought from other users, `gifted_upgrade`
+    /// for upgrades purchased after the gift was sent, or `offer` for gifts
+    /// bought or sold through gift purchase offers
     pub origin: UniqueGiftOrigin,
 
-    /// For gifts bought from other users, the price paid for the gift
-    pub last_resale_star_count: Option<u32>,
+    /// For gifts bought from other users, currency for the price paid for the
+    /// gift ("XTR" for Telegram Stars or the ISO 4217 currency code)
+    pub last_resale_currency: Option<String>,
+
+    /// For gifts bought from other users, the amount of currency paid for the
+    /// gift
+    pub last_resale_amount: Option<u32>,
 
     /// Unique identifier of the received gift for the bot; only present for
     /// gifts received on behalf of business accounts
@@ -33,9 +40,11 @@ pub struct UniqueGiftInfo {
     pub next_transfer_date: Option<DateTime<Utc>>,
 }
 
-/// Origin of the gift. Currently, either `Upgrade` for gifts upgraded from
-/// regular gifts, `Transfer` for gifts transferred from other users or
-/// channels, or `Resale` for gifts bought from other users
+/// Origin of the gift. Currently, either `upgrade` for gifts upgraded from
+/// regular gifts, `transfer` for gifts transferred from other users or
+/// channels, `resale` for gifts bought from other users, `gifted_upgrade` for
+/// upgrades purchased after the gift was sent, or `offer` for gifts bought or
+/// sold through gift purchase offers
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 #[cfg_attr(test, derive(schemars::JsonSchema))]
 #[serde(rename_all = "snake_case")]
@@ -43,6 +52,8 @@ pub enum UniqueGiftOrigin {
     Upgrade,
     Transfer,
     Resale,
+    GiftedUpgrade,
+    Offer,
 }
 
 #[cfg(test)]
@@ -53,6 +64,7 @@ mod tests {
     fn deserialize() {
         let data = r#"{
             "gift": {
+                "gift_id": "gift_id",
                 "base_name": "name",
                 "name": "name",
                 "number": 123,

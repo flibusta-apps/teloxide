@@ -479,6 +479,15 @@ macro_rules! requester_forward {
             $body!(send_message this (chat_id: C, text: T))
         }
     };
+    (@method send_message_draft $body:ident $ty:ident) => {
+        type SendMessageDraft = $ty![SendMessageDraft];
+
+        fn send_message_draft<C, T>(&self, chat_id: C, draft_id: i64, text: T) -> Self::SendMessageDraft where C: Into<ChatId>,
+        T: Into<String> {
+            let this = self;
+            $body!(send_message_draft this (chat_id: C, draft_id: i64, text: T))
+        }
+    };
     (@method forward_message $body:ident $ty:ident) => {
         type ForwardMessage = $ty![ForwardMessage];
 
@@ -1639,6 +1648,22 @@ macro_rules! requester_forward {
             $body!(get_business_account_gifts this (business_connection_id: BusinessConnectionId))
         }
     };
+    (@method get_user_gifts $body:ident $ty:ident) => {
+        type GetUserGifts = $ty![GetUserGifts];
+
+        fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts {
+            let this = self;
+            $body!(get_user_gifts this (user_id: UserId))
+        }
+    };
+    (@method get_chat_gifts $body:ident $ty:ident) => {
+        type GetChatGifts = $ty![GetChatGifts];
+
+        fn get_chat_gifts<C>(&self, chat_id: C) -> Self::GetChatGifts where C: Into<Recipient> {
+            let this = self;
+            $body!(get_chat_gifts this (chat_id: C))
+        }
+    };
     (@method convert_gift_to_stars $body:ident $ty:ident) => {
         type ConvertGiftToStars = $ty![ConvertGiftToStars];
 
@@ -1661,6 +1686,14 @@ macro_rules! requester_forward {
         fn transfer_gift<N>(&self, business_connection_id: BusinessConnectionId, owned_gift_id: OwnedGiftId, new_owner_chat_id: N) -> Self::TransferGift where N: Into<ChatId> {
             let this = self;
             $body!(transfer_gift this (business_connection_id: BusinessConnectionId, owned_gift_id: OwnedGiftId, new_owner_chat_id: N))
+        }
+    };
+    (@method repost_story $body:ident $ty:ident) => {
+        type RepostStory = $ty![RepostStory];
+
+        fn repost_story<F>(&self, business_connection_id: BusinessConnectionId, from_chat_id: F, from_story_id: StoryId, active_period: Seconds) -> Self::RepostStory where F: Into<Recipient> {
+            let this = self;
+            $body!(repost_story this (business_connection_id: BusinessConnectionId, from_chat_id: F, from_story_id: StoryId, active_period: Seconds))
         }
     };
     (@method post_story $body:ident $ty:ident) => {

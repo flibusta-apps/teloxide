@@ -1,4 +1,4 @@
-use crate::types::{Chat, Rgb, Sticker};
+use crate::types::{Chat, GiftId, Rgb, Sticker, UniqueGiftColors};
 use serde::{Deserialize, Serialize};
 
 /// This object describes a unique gift that was upgraded from a regular gift.
@@ -8,6 +8,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 #[cfg_attr(test, derive(schemars::JsonSchema))]
 pub struct UniqueGift {
+    /// Unique identifier of the regular gift from which this unique gift was
+    /// created
+    pub gift_id: GiftId,
+
     /// Human-readable name of the regular gift from which this unique gift was
     /// upgraded
     pub base_name: String,
@@ -30,6 +34,18 @@ pub struct UniqueGift {
 
     /// Information about the chat that published the gift
     pub publisher_chat: Option<Chat>,
+
+    /// `true`, if the gift was assigned from the TON blockchain and can't be
+    /// resold or transferred in Telegram
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_from_blockchain: bool,
+
+    /// `true`, if the gift is a Telegram Premium gift
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_premium: bool,
+
+    /// Colors of the gift
+    pub colors: Option<UniqueGiftColors>,
 }
 
 /// This object describes the model of a unique gift.
@@ -131,6 +147,7 @@ mod tests {
         };
 
         let unique_gift = UniqueGift {
+            gift_id: GiftId("gift_id".to_owned()),
             base_name: "name".to_owned(),
             name: "name".to_owned(),
             number: 123,
@@ -155,9 +172,13 @@ mod tests {
                 rarity_per_mille: 123,
             },
             publisher_chat: None,
+            is_from_blockchain: false,
+            is_premium: false,
+            colors: None,
         };
 
         let unique_gift_json = r#"{
+            "gift_id": "gift_id",
             "base_name": "name",
             "name": "name",
             "number": 123,

@@ -75,6 +75,16 @@ pub struct OwnedGiftRegular {
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub can_be_upgraded: bool,
 
+    /// `true`, if the gift can only be upgraded on its own, and the option to
+    /// upgrade the gift and add more Telegram Stars to the upgrade
+    /// simultaneously isn't available
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_upgrade_separate: bool,
+
+    /// Number of the corresponding unique gift, if the gift is upgraded and the
+    /// number is known
+    pub unique_gift_number: Option<u64>,
+
     /// `true`, if the gift was refunded and isn't available anymore
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub was_refunded: bool,
