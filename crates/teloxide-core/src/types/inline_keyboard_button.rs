@@ -1,5 +1,6 @@
 use crate::types::{
-    CallbackGame, CopyTextButton, LoginUrl, SwitchInlineQueryChosenChat, True, WebAppInfo,
+    ButtonStyle, CallbackGame, CopyTextButton, CustomEmojiId, LoginUrl,
+    SwitchInlineQueryChosenChat, True, WebAppInfo,
 };
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +13,16 @@ use serde::{Deserialize, Serialize};
 pub struct InlineKeyboardButton {
     /// Label text on the button.
     pub text: String,
+
+    /// Unique identifier of the custom emoji shown before the text of the
+    /// button. Can only be used by bots that purchased additional usernames
+    /// on Fragment or in the messages directly sent by the bot to private,
+    /// group and supergroup chats if the owner of the bot has a Telegram
+    /// Premium subscription.
+    pub icon_custom_emoji_id: Option<CustomEmojiId>,
+
+    /// Style of the button. If omitted, then an app-specific style is used.
+    pub style: Option<ButtonStyle>,
 
     #[serde(flatten)]
     pub kind: InlineKeyboardButtonKind,
@@ -113,7 +124,7 @@ impl InlineKeyboardButton {
     where
         S: Into<String>,
     {
-        Self { text: text.into(), kind }
+        Self { text: text.into(), icon_custom_emoji_id: None, style: None, kind }
     }
 
     /// Constructor for `InlineKeyboardButton` with [`Url`] kind.

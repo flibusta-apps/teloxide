@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for TBA 9.4
+  - Add `allows_users_to_create_topics` field to `User` struct
+  - Add `icon_custom_emoji_id` and `style` fields to `KeyboardButton` and `InlineKeyboardButton` structs
+  - Add `ButtonStyle` enum
+  - Add `ChatOwnerLeft` struct, and `chat_owner_left` field to `Message` struct
+  - Add `ChatOwnerChanged` struct, and `chat_owner_changed` field to `Message` struct
+  - Add `set_my_profile_photo` and `remove_my_profile_photo` methods
+  - Add `VideoQuality` struct, and `qualities` field to `Video` struct
+  - Add `first_profile_audio` field to `ChatFullInfo` struct
+  - Add `UserProfileAudios` struct, and `get_user_profile_audios` method
+  - Add `rarity` field to `UniqueGiftModel` struct
+  - Add `is_burned` field to `UniqueGift` struct
 - Support for TBA 9.3
   - Add `has_topics_enabled` field to `User` struct
   - Add `send_message_draft` method

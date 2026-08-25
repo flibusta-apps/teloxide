@@ -41,6 +41,11 @@ pub struct User {
     /// the user.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub has_topics_enabled: bool,
+
+    /// `true`, if the bot allows users to create and delete topics in private
+    /// chats.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub allows_users_to_create_topics: bool,
 }
 
 impl User {
@@ -158,6 +163,7 @@ mod tests {
             is_premium: false,
             added_to_attachment_menu: false,
             has_topics_enabled: false,
+            allows_users_to_create_topics: false,
         };
         let actual = serde_json::from_str::<User>(json).unwrap();
         assert_eq!(actual, expected)
@@ -175,6 +181,7 @@ mod tests {
             is_premium: false,
             added_to_attachment_menu: false,
             has_topics_enabled: false,
+            allows_users_to_create_topics: false,
         };
 
         let user_b = User {
@@ -187,6 +194,7 @@ mod tests {
             is_premium: false,
             added_to_attachment_menu: false,
             has_topics_enabled: false,
+            allows_users_to_create_topics: false,
         };
 
         assert_eq!(user_a.full_name(), "First Last");

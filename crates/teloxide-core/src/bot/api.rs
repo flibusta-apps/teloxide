@@ -1047,6 +1047,18 @@ impl Requester for Bot {
         Self::GetChatMenuButton::new(self.clone(), payloads::GetChatMenuButton::new())
     }
 
+    type SetMyProfilePhoto = JsonRequest<payloads::SetMyProfilePhoto>;
+
+    fn set_my_profile_photo(&self, photo: InputProfilePhoto) -> Self::SetMyProfilePhoto {
+        Self::SetMyProfilePhoto::new(self.clone(), payloads::SetMyProfilePhoto::new(photo))
+    }
+
+    type RemoveMyProfilePhoto = JsonRequest<payloads::RemoveMyProfilePhoto>;
+
+    fn remove_my_profile_photo(&self) -> Self::RemoveMyProfilePhoto {
+        Self::RemoveMyProfilePhoto::new(self.clone(), payloads::RemoveMyProfilePhoto::new())
+    }
+
     type SetMyDefaultAdministratorRights = JsonRequest<payloads::SetMyDefaultAdministratorRights>;
 
     fn set_my_default_administrator_rights(&self) -> Self::SetMyDefaultAdministratorRights {
@@ -1743,6 +1755,12 @@ impl Requester for Bot {
 
     fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts {
         Self::GetUserGifts::new(self.clone(), payloads::GetUserGifts::new(user_id))
+    }
+
+    type GetUserProfileAudios = JsonRequest<payloads::GetUserProfileAudios>;
+
+    fn get_user_profile_audios(&self, user_id: UserId) -> Self::GetUserProfileAudios {
+        Self::GetUserProfileAudios::new(self.clone(), payloads::GetUserProfileAudios::new(user_id))
     }
 
     type GetChatGifts = JsonRequest<payloads::GetChatGifts>;

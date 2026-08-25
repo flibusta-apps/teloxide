@@ -7,18 +7,19 @@ use url::Url;
 
 use crate::types::{
     Animation, Audio, BareChatId, BusinessConnectionId, Chat, ChatBackground, ChatBoostAdded,
-    ChatId, ChatShared, Checklist, ChecklistTaskId, ChecklistTasksAdded, ChecklistTasksDone,
-    Contact, Dice, DirectMessagePriceChanged, DirectMessagesTopic, Document, ExternalReplyInfo,
-    ForumTopicClosed, ForumTopicCreated, ForumTopicEdited, ForumTopicReopened, Game,
-    GeneralForumTopicHidden, GeneralForumTopicUnhidden, GiftInfo, Giveaway, GiveawayCompleted,
-    GiveawayCreated, GiveawayWinners, InlineKeyboardMarkup, Invoice, LinkPreviewOptions, Location,
-    MaybeInaccessibleMessage, MessageAutoDeleteTimerChanged, MessageEntity, MessageEntityRef,
-    MessageId, MessageOrigin, PaidMediaInfo, PaidMessagePriceChanged, PassportData, PhotoSize,
-    Poll, ProximityAlertTriggered, RefundedPayment, Sticker, Story, SuccessfulPayment,
-    SuggestedPostApprovalFailed, SuggestedPostApproved, SuggestedPostDeclined, SuggestedPostInfo,
-    SuggestedPostPaid, SuggestedPostRefunded, TextQuote, ThreadId, True, UniqueGiftInfo, User,
-    UsersShared, Venue, Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled,
-    VideoChatStarted, VideoNote, Voice, WebAppData, WriteAccessAllowed,
+    ChatId, ChatOwnerChanged, ChatOwnerLeft, ChatShared, Checklist, ChecklistTaskId,
+    ChecklistTasksAdded, ChecklistTasksDone, Contact, Dice, DirectMessagePriceChanged,
+    DirectMessagesTopic, Document, ExternalReplyInfo, ForumTopicClosed, ForumTopicCreated,
+    ForumTopicEdited, ForumTopicReopened, Game, GeneralForumTopicHidden, GeneralForumTopicUnhidden,
+    GiftInfo, Giveaway, GiveawayCompleted, GiveawayCreated, GiveawayWinners, InlineKeyboardMarkup,
+    Invoice, LinkPreviewOptions, Location, MaybeInaccessibleMessage, MessageAutoDeleteTimerChanged,
+    MessageEntity, MessageEntityRef, MessageId, MessageOrigin, PaidMediaInfo,
+    PaidMessagePriceChanged, PassportData, PhotoSize, Poll, ProximityAlertTriggered,
+    RefundedPayment, Sticker, Story, SuccessfulPayment, SuggestedPostApprovalFailed,
+    SuggestedPostApproved, SuggestedPostDeclined, SuggestedPostInfo, SuggestedPostPaid,
+    SuggestedPostRefunded, TextQuote, ThreadId, True, UniqueGiftInfo, User, UsersShared, Venue,
+    Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled, VideoChatStarted,
+    VideoNote, Voice, WebAppData, WriteAccessAllowed,
 };
 
 /// This object represents a message.
@@ -94,6 +95,8 @@ pub enum MessageKind {
     Common(MessageCommon),
     NewChatMembers(MessageNewChatMembers),
     LeftChatMember(MessageLeftChatMember),
+    ChatOwnerLeft(MessageChatOwnerLeft),
+    ChatOwnerChanged(MessageChatOwnerChanged),
     NewChatTitle(MessageNewChatTitle),
     NewChatPhoto(MessageNewChatPhoto),
     DeleteChatPhoto(MessageDeleteChatPhoto),
@@ -255,6 +258,22 @@ pub struct MessageLeftChatMember {
     /// A member was removed from the group, information about them (this
     /// member may be the bot itself).
     pub left_chat_member: User,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(test, derive(schemars::JsonSchema))]
+pub struct MessageChatOwnerLeft {
+    /// Service message: chat owner has left
+    pub chat_owner_left: ChatOwnerLeft,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(test, derive(schemars::JsonSchema))]
+pub struct MessageChatOwnerChanged {
+    /// Service message: chat owner has changed
+    pub chat_owner_changed: ChatOwnerChanged,
 }
 
 #[serde_with::skip_serializing_none]
@@ -1000,12 +1019,13 @@ mod getters {
         MaybeInaccessibleMessage, MediaAnimation, MediaAudio, MediaChecklist, MediaContact,
         MediaDocument, MediaGame, MediaKind, MediaLocation, MediaPaid, MediaPhoto, MediaPoll,
         MediaSticker, MediaStory, MediaText, MediaVenue, MediaVideo, MediaVideoNote, MediaVoice,
-        Message, MessageChannelChatCreated, MessageChatShared, MessageChecklistTasksAdded,
-        MessageChecklistTasksDone, MessageCommon, MessageConnectedWebsite, MessageDeleteChatPhoto,
-        MessageDice, MessageDirectMessagePriceChanged, MessageEntity, MessageGroupChatCreated,
-        MessageId, MessageInvoice, MessageLeftChatMember, MessageNewChatMembers,
-        MessageNewChatPhoto, MessageNewChatTitle, MessageOrigin, MessagePassportData,
-        MessagePinned, MessageProximityAlertTriggered, MessageSuccessfulPayment,
+        Message, MessageChannelChatCreated, MessageChatOwnerChanged, MessageChatOwnerLeft,
+        MessageChatShared, MessageChecklistTasksAdded, MessageChecklistTasksDone, MessageCommon,
+        MessageConnectedWebsite, MessageDeleteChatPhoto, MessageDice,
+        MessageDirectMessagePriceChanged, MessageEntity, MessageGroupChatCreated, MessageId,
+        MessageInvoice, MessageLeftChatMember, MessageNewChatMembers, MessageNewChatPhoto,
+        MessageNewChatTitle, MessageOrigin, MessagePassportData, MessagePinned,
+        MessageProximityAlertTriggered, MessageSuccessfulPayment,
         MessageSuggestedPostApprovalFailed, MessageSuggestedPostApproved,
         MessageSuggestedPostDeclined, MessageSuggestedPostPaid, MessageSuggestedPostRefunded,
         MessageSupergroupChatCreated, MessageUsersShared, MessageVideoChatParticipantsInvited,
@@ -1538,6 +1558,24 @@ mod getters {
             match &self.kind {
                 LeftChatMember(MessageLeftChatMember { left_chat_member }) => {
                     Some(left_chat_member)
+                }
+                _ => None,
+            }
+        }
+
+        #[must_use]
+        pub fn chat_owner_left(&self) -> Option<&types::ChatOwnerLeft> {
+            match &self.kind {
+                ChatOwnerLeft(MessageChatOwnerLeft { chat_owner_left }) => Some(chat_owner_left),
+                _ => None,
+            }
+        }
+
+        #[must_use]
+        pub fn chat_owner_changed(&self) -> Option<&types::ChatOwnerChanged> {
+            match &self.kind {
+                ChatOwnerChanged(MessageChatOwnerChanged { chat_owner_changed }) => {
+                    Some(chat_owner_changed)
                 }
                 _ => None,
             }
@@ -2293,6 +2331,8 @@ impl Message {
             .chain(flatten(self.reply_to_message().map(Self::mentioned_users_rec)))
             .chain(flatten(self.new_chat_members()))
             .chain(self.left_chat_member())
+            .chain(self.chat_owner_left().and_then(|c| c.new_owner.as_ref()))
+            .chain(self.chat_owner_changed().map(|c| &c.new_owner))
             .chain(self.forward_from_user())
             .chain(flatten(self.game().map(Game::mentioned_users)))
             .chain(flatten(self.entities().map(mentioned_users_from_entities)))
@@ -3144,6 +3184,7 @@ mod tests {
                     is_premium: false,
                     added_to_attachment_menu: false,
                     has_topics_enabled: false,
+                    allows_users_to_create_topics: false,
                 }],
                 additional_chat_count: None,
                 premium_subscription_month_count: Some(6),

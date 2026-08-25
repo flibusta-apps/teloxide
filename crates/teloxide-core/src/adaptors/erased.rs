@@ -337,7 +337,10 @@ where
         transfer_business_account_stars,
         get_business_account_gifts,
         get_user_gifts,
+        get_user_profile_audios,
         get_chat_gifts,
+        set_my_profile_photo,
+        remove_my_profile_photo,
         convert_gift_to_stars,
         upgrade_gift,
         transfer_gift,
@@ -1153,7 +1156,19 @@ trait ErasableRequester<'a> {
 
     fn get_user_gifts(&self, user_id: UserId) -> ErasedRequest<'a, GetUserGifts, Self::Err>;
 
+    fn get_user_profile_audios(
+        &self,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, GetUserProfileAudios, Self::Err>;
+
     fn get_chat_gifts(&self, chat_id: Recipient) -> ErasedRequest<'a, GetChatGifts, Self::Err>;
+
+    fn set_my_profile_photo(
+        &self,
+        photo: InputProfilePhoto,
+    ) -> ErasedRequest<'a, SetMyProfilePhoto, Self::Err>;
+
+    fn remove_my_profile_photo(&self) -> ErasedRequest<'a, RemoveMyProfilePhoto, Self::Err>;
 
     fn convert_gift_to_stars(
         &self,
@@ -2410,8 +2425,26 @@ where
         Requester::get_user_gifts(self, user_id).erase()
     }
 
+    fn get_user_profile_audios(
+        &self,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, GetUserProfileAudios, Self::Err> {
+        Requester::get_user_profile_audios(self, user_id).erase()
+    }
+
     fn get_chat_gifts(&self, chat_id: Recipient) -> ErasedRequest<'a, GetChatGifts, Self::Err> {
         Requester::get_chat_gifts(self, chat_id).erase()
+    }
+
+    fn set_my_profile_photo(
+        &self,
+        photo: InputProfilePhoto,
+    ) -> ErasedRequest<'a, SetMyProfilePhoto, Self::Err> {
+        Requester::set_my_profile_photo(self, photo).erase()
+    }
+
+    fn remove_my_profile_photo(&self) -> ErasedRequest<'a, RemoveMyProfilePhoto, Self::Err> {
+        Requester::remove_my_profile_photo(self).erase()
     }
 
     fn convert_gift_to_stars(

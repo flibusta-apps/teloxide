@@ -1208,6 +1208,22 @@ macro_rules! requester_forward {
             $body!(get_chat_menu_button this ())
         }
     };
+    (@method set_my_profile_photo $body:ident $ty:ident) => {
+        type SetMyProfilePhoto = $ty![SetMyProfilePhoto];
+
+        fn set_my_profile_photo(&self, photo: InputProfilePhoto) -> Self::SetMyProfilePhoto {
+            let this = self;
+            $body!(set_my_profile_photo this (photo: InputProfilePhoto))
+        }
+    };
+    (@method remove_my_profile_photo $body:ident $ty:ident) => {
+        type RemoveMyProfilePhoto = $ty![RemoveMyProfilePhoto];
+
+        fn remove_my_profile_photo(&self, ) -> Self::RemoveMyProfilePhoto {
+            let this = self;
+            $body!(remove_my_profile_photo this ())
+        }
+    };
     (@method set_my_default_administrator_rights $body:ident $ty:ident) => {
         type SetMyDefaultAdministratorRights = $ty![SetMyDefaultAdministratorRights];
 
@@ -1654,6 +1670,14 @@ macro_rules! requester_forward {
         fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts {
             let this = self;
             $body!(get_user_gifts this (user_id: UserId))
+        }
+    };
+    (@method get_user_profile_audios $body:ident $ty:ident) => {
+        type GetUserProfileAudios = $ty![GetUserProfileAudios];
+
+        fn get_user_profile_audios(&self, user_id: UserId) -> Self::GetUserProfileAudios {
+            let this = self;
+            $body!(get_user_profile_audios this (user_id: UserId))
         }
     };
     (@method get_chat_gifts $body:ident $ty:ident) => {

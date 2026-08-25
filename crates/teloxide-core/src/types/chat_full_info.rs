@@ -3,8 +3,8 @@ use derive_more::derive::From;
 use serde::{Deserialize, Serialize};
 
 use crate::types::{
-    AcceptedGiftTypes, Birthdate, BusinessIntro, BusinessLocation, BusinessOpeningHours, Chat,
-    ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds,
+    AcceptedGiftTypes, Audio, Birthdate, BusinessIntro, BusinessLocation, BusinessOpeningHours,
+    Chat, ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds,
     UniqueGiftColors, User, UserRating,
 };
 
@@ -63,6 +63,9 @@ pub struct ChatFullInfo {
 
     /// For private chats, the rating of the user if any
     pub rating: Option<UserRating>,
+
+    /// For private chats, the first audio added to the profile of the user
+    pub first_profile_audio: Option<Audio>,
 
     /// The number of Telegram Stars a general user have to pay to send a
     /// message to the chat
@@ -760,6 +763,7 @@ mod tests {
                 gifts_from_channels: false,
             },
             rating: None,
+            first_profile_audio: None,
             paid_message_star_count: None,
             unique_gift_colors: None,
             accent_color_id: 0,
@@ -826,6 +830,7 @@ mod tests {
                 gifts_from_channels: false,
             },
             rating: None,
+            first_profile_audio: None,
             paid_message_star_count: None,
             unique_gift_colors: None,
             accent_color_id: 0,
@@ -890,6 +895,7 @@ mod tests {
                 gifts_from_channels: false,
             },
             rating: None,
+            first_profile_audio: None,
             paid_message_star_count: None,
             unique_gift_colors: None,
             accent_color_id: 0,

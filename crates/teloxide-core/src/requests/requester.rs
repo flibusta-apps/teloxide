@@ -957,6 +957,16 @@ pub trait Requester {
     /// For Telegram documentation see [`GetChatMenuButton`].
     fn get_chat_menu_button(&self) -> Self::GetChatMenuButton;
 
+    type SetMyProfilePhoto: Request<Payload = SetMyProfilePhoto, Err = Self::Err>;
+
+    /// For Telegram documentation see [`SetMyProfilePhoto`].
+    fn set_my_profile_photo(&self, photo: InputProfilePhoto) -> Self::SetMyProfilePhoto;
+
+    type RemoveMyProfilePhoto: Request<Payload = RemoveMyProfilePhoto, Err = Self::Err>;
+
+    /// For Telegram documentation see [`RemoveMyProfilePhoto`].
+    fn remove_my_profile_photo(&self) -> Self::RemoveMyProfilePhoto;
+
     type SetMyDefaultAdministratorRights: Request<
         Payload = SetMyDefaultAdministratorRights,
         Err = Self::Err,
@@ -1471,6 +1481,11 @@ pub trait Requester {
     /// For Telegram documentation see [`GetUserGifts`].
     fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts;
 
+    type GetUserProfileAudios: Request<Payload = GetUserProfileAudios, Err = Self::Err>;
+
+    /// For Telegram documentation see [`GetUserProfileAudios`].
+    fn get_user_profile_audios(&self, user_id: UserId) -> Self::GetUserProfileAudios;
+
     type GetChatGifts: Request<Payload = GetChatGifts, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChatGifts`].
@@ -1850,7 +1865,10 @@ macro_rules! forward_all {
             transfer_business_account_stars,
             get_business_account_gifts,
             get_user_gifts,
+            get_user_profile_audios,
             get_chat_gifts,
+            set_my_profile_photo,
+            remove_my_profile_photo,
             convert_gift_to_stars,
             upgrade_gift,
             transfer_gift,

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for TBA 9.4, see [its changelog](crates/teloxide-core/CHANGELOG.md) for more information
 - Support for TBA 9.3, see [its changelog](crates/teloxide-core/CHANGELOG.md) for more information [**BC**]
 - `MessageToEditHasNoText` variant to `ApiError` ([#1426](https://github.com/teloxide/teloxide/issues/1426))
 - `ParticipantIdInvalid` and `ChatAdminRequired` variants to `ApiError` ([#1349](https://github.com/teloxide/teloxide/issues/1349))

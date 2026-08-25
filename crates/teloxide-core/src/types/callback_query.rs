@@ -124,6 +124,7 @@ mod tests {
                 is_premium: false,
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
+                allows_users_to_create_topics: false,
             },
             chat_instance: "123456".to_string(),
             message: None,

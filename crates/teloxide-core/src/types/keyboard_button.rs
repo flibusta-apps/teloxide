@@ -1,7 +1,8 @@
 use serde::{de::Error, Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::types::{
-    KeyboardButtonPollType, KeyboardButtonRequestChat, KeyboardButtonRequestUsers, True, WebAppInfo,
+    ButtonStyle, CustomEmojiId, KeyboardButtonPollType, KeyboardButtonRequestChat,
+    KeyboardButtonRequestUsers, True, WebAppInfo,
 };
 
 /// This object represents one button of the reply keyboard.
@@ -18,6 +19,18 @@ pub struct KeyboardButton {
     /// be sent as a message when the button is pressed.
     pub text: String,
 
+    /// Unique identifier of the custom emoji shown before the text of the
+    /// button. Can only be used by bots that purchased additional usernames
+    /// on Fragment or in the messages directly sent by the bot to private,
+    /// group and supergroup chats if the owner of the bot has a Telegram
+    /// Premium subscription.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icon_custom_emoji_id: Option<CustomEmojiId>,
+
+    /// Style of the button. If omitted, then an app-specific style is used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style: Option<ButtonStyle>,
+
     /// Request something from user. This is available in private chats only.
     ///
     /// See [`ButtonRequest`] documentation for options on what can be
@@ -31,7 +44,7 @@ impl KeyboardButton {
     where
         T: Into<String>,
     {
-        Self { text: text.into(), request: None }
+        Self { text: text.into(), icon_custom_emoji_id: None, style: None, request: None }
     }
 
     pub fn request<T>(mut self, val: T) -> Self
@@ -213,7 +226,12 @@ mod tests {
 
     #[test]
     fn serialize_no_request() {
-        let button = KeyboardButton { text: String::from(""), request: None };
+        let button = KeyboardButton {
+            text: String::from(""),
+            icon_custom_emoji_id: None,
+            style: None,
+            request: None,
+        };
         let expected = r#"{"text":""}"#;
         let actual = serde_json::to_string(&button).unwrap();
         assert_eq!(expected, actual);
@@ -221,8 +239,12 @@ mod tests {
 
     #[test]
     fn serialize_request_contact() {
-        let button =
-            KeyboardButton { text: String::from(""), request: Some(ButtonRequest::Contact) };
+        let button = KeyboardButton {
+            text: String::from(""),
+            icon_custom_emoji_id: None,
+            style: None,
+            request: Some(ButtonRequest::Contact),
+        };
         let expected = r#"{"text":"","request_contact":true}"#;
         let actual = serde_json::to_string(&button).unwrap();
         assert_eq!(expected, actual);
@@ -232,6 +254,8 @@ mod tests {
     fn serialize_chat_request() {
         let button = KeyboardButton {
             text: String::from(""),
+            icon_custom_emoji_id: None,
+            style: None,
             request: Some(ButtonRequest::RequestChat(KeyboardButtonRequestChat::new(
                 RequestId(0),
                 false,
@@ -245,7 +269,12 @@ mod tests {
     #[test]
     fn deserialize_no_request() {
         let json = r#"{"text":""}"#;
-        let expected = KeyboardButton { text: String::from(""), request: None };
+        let expected = KeyboardButton {
+            text: String::from(""),
+            icon_custom_emoji_id: None,
+            style: None,
+            request: None,
+        };
         let actual = serde_json::from_str(json).unwrap();
         assert_eq!(expected, actual);
     }
@@ -253,8 +282,12 @@ mod tests {
     #[test]
     fn deserialize_request_contact() {
         let json = r#"{"text":"","request_contact":true}"#;
-        let expected =
-            KeyboardButton { text: String::from(""), request: Some(ButtonRequest::Contact) };
+        let expected = KeyboardButton {
+            text: String::from(""),
+            icon_custom_emoji_id: None,
+            style: None,
+            request: Some(ButtonRequest::Contact),
+        };
         let actual = serde_json::from_str(json).unwrap();
         assert_eq!(expected, actual);
     }
