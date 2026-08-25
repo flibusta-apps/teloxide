@@ -199,6 +199,9 @@ where
     }
 
     requester_forward! {
+        get_managed_bot_token,
+        replace_managed_bot_token,
+        save_prepared_keyboard_button,
         get_me,
         log_out,
         close,

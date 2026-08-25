@@ -424,6 +424,25 @@ pub trait Requester {
         P: Into<String>,
         F: Into<String>;
 
+    type GetManagedBotToken: Request<Payload = GetManagedBotToken, Err = Self::Err>;
+
+    /// For Telegram documentation see [`GetManagedBotToken`].
+    fn get_managed_bot_token(&self, user_id: UserId) -> Self::GetManagedBotToken;
+
+    type ReplaceManagedBotToken: Request<Payload = ReplaceManagedBotToken, Err = Self::Err>;
+
+    /// For Telegram documentation see [`ReplaceManagedBotToken`].
+    fn replace_managed_bot_token(&self, user_id: UserId) -> Self::ReplaceManagedBotToken;
+
+    type SavePreparedKeyboardButton: Request<Payload = SavePreparedKeyboardButton, Err = Self::Err>;
+
+    /// For Telegram documentation see [`SavePreparedKeyboardButton`].
+    fn save_prepared_keyboard_button(
+        &self,
+        user_id: UserId,
+        button: KeyboardButton,
+    ) -> Self::SavePreparedKeyboardButton;
+
     type SendPoll: Request<Payload = SendPoll, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendPoll`].
@@ -1824,6 +1843,9 @@ macro_rules! forward_all {
             answer_inline_query,
             answer_web_app_query,
             save_prepared_inline_message,
+            get_managed_bot_token,
+            replace_managed_bot_token,
+            save_prepared_keyboard_button,
             edit_message_text,
             edit_message_text_inline,
             edit_message_caption,

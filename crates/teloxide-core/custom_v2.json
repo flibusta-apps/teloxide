@@ -1,13 +1,13 @@
 {
   "version": {
     "major": 9,
-    "minor": 5,
+    "minor": 6,
     "patch": 0
   },
   "recent_changes": {
     "year": 2026,
-    "month": 3,
-    "day": 1
+    "month": 4,
+    "day": 3
   },
   "methods": [
     {
@@ -3451,12 +3451,15 @@
           }
         },
         {
-          "name": "correct_option_id",
+          "name": "correct_option_ids",
           "description": "0-based identifier of the correct answer option, required for polls in quiz mode",
           "required": false,
           "type_info": {
-            "type": "integer",
-            "enumeration": []
+            "type": "array",
+            "array": {
+              "type": "integer",
+              "enumeration": []
+            }
           }
         },
         {
@@ -11155,6 +11158,14 @@
           "type_info": {
             "type": "bool"
           }
+        },
+        {
+          "name": "can_manage_bots",
+          "description": "*Optional*. *True*, if other bots can be created to be controlled by this bot. Returned only in [getMe](https://core.telegram.org/bots/api#getme).",
+          "required": false,
+          "type_info": {
+            "type": "bool"
+          }
         }
       ],
       "documentation_link": "https://core.telegram.org/bots/api#user"
@@ -14512,12 +14523,15 @@
           }
         },
         {
-          "name": "correct_option_id",
+          "name": "correct_option_ids",
           "description": "*Optional*. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.",
           "required": false,
           "type_info": {
-            "type": "integer",
-            "enumeration": []
+            "type": "array",
+            "array": {
+              "type": "integer",
+              "enumeration": []
+            }
           }
         },
         {

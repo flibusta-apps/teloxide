@@ -1,4 +1,4 @@
-use crate::types::{MessageEntity, PollType, Seconds, User};
+use crate::types::{Chat, MessageEntity, PollType, Seconds, User};
 
 use chrono::{DateTime, Utc};
 use derive_more::derive::From;
@@ -58,10 +58,13 @@ pub struct Poll {
     /// True, if the poll allows multiple answers
     pub allows_multiple_answers: bool,
 
-    /// 0-based identifier of the correct answer option. Available only for
+    /// `true`, if the poll allows to change the chosen answer options.
+    pub allows_revoting: bool,
+
+    /// 0-based identifiers of the correct answer options. Available only for
     /// polls in the quiz mode, which are closed, or was sent (not
     /// forwarded) by the bot or to the private chat with the bot.
-    pub correct_option_id: Option<u8>,
+    pub correct_option_ids: Option<Vec<u8>>,
 
     /// Text that is shown when a user chooses an incorrect answer or taps on
     /// the lamp icon in a quiz-style poll, 0-200 characters.
@@ -78,6 +81,12 @@ pub struct Poll {
     #[serde(default, with = "crate::types::serde_opt_date_from_unix_timestamp")]
     #[cfg_attr(test, schemars(with = "Option<i64>"))]
     pub close_date: Option<DateTime<Utc>>,
+
+    /// Description of the poll; for polls inside the Message object only.
+    pub description: Option<String>,
+
+    /// Special entities that appear in the description.
+    pub description_entities: Option<Vec<MessageEntity>>,
 }
 
 /// This object contains information about one answer option in a poll.
@@ -86,6 +95,9 @@ pub struct Poll {
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 #[cfg_attr(test, derive(schemars::JsonSchema))]
 pub struct PollOption {
+    /// Persistent identifier of the option.
+    pub persistent_id: String,
+
     /// Option text, 1-100 characters.
     pub text: String,
 
@@ -95,6 +107,17 @@ pub struct PollOption {
 
     /// Number of users that voted for this option.
     pub voter_count: u32,
+
+    /// User who added the option.
+    pub added_by_user: Option<User>,
+
+    /// Chat that added the option.
+    pub added_by_chat: Option<Chat>,
+
+    /// Point in time when the option was added.
+    #[serde(default, with = "crate::types::serde_opt_date_from_unix_timestamp")]
+    #[cfg_attr(test, schemars(with = "Option<i64>"))]
+    pub addition_date: Option<DateTime<Utc>>,
 }
 
 impl Poll {
@@ -120,27 +143,33 @@ mod tests {
         let data = r#"
         {
             "allows_multiple_answers": false,
+            "allows_revoting": false,
             "id": "5377643193141559299",
             "is_anonymous": true,
             "is_closed": false,
             "options": [
                 {
+                    "persistent_id": "1",
                     "text": "1",
                     "voter_count": 1
                 },
                 {
+                    "persistent_id": "2",
                     "text": "2",
                     "voter_count": 0
                 },
                 {
+                    "persistent_id": "3",
                     "text": "3",
                     "voter_count": 0
                 },
                 {
+                    "persistent_id": "4",
                     "text": "4",
                     "voter_count": 0
                 },
                 {
+                    "persistent_id": "5",
                     "text": "5",
                     "voter_count": 0
                 }

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for TBA 9.6
+  - Managed bots: `get_managed_bot_token`, `replace_managed_bot_token`, `save_prepared_keyboard_button`, `KeyboardButtonRequestManagedBot`, `ManagedBotCreated`, `ManagedBotUpdated`, and `User::can_manage_bots`
+  - `Poll::correct_option_id` was replaced with `Poll::correct_option_ids` (`Vec<u8>`) [**BC**]
+  - `SendPoll::correct_option_id` was replaced with `SendPoll::correct_option_ids` [**BC**]
+  - Poll revoting, shuffled and addable options, delayed results, descriptions, persistent poll option metadata, persistent poll answer IDs, and poll-option reply parameters
+  - `Message::reply_to_poll_option_id`, `MessageKind::PollOptionAdded`, `MessageKind::PollOptionDeleted`, `MessageKind::ManagedBotCreated`, and `UpdateKind::ManagedBot`
 - `set_chat_member_tag` method
 - `MessageEntityKind::DateTime` variant
 - `sender_tag` field to `Message`

@@ -668,6 +668,30 @@ macro_rules! requester_forward {
             $body!(send_contact this (chat_id: C, phone_number: P, first_name: F))
         }
     };
+    (@method get_managed_bot_token $body:ident $ty:ident) => {
+        type GetManagedBotToken = $ty![GetManagedBotToken];
+
+        fn get_managed_bot_token(&self, user_id: UserId) -> Self::GetManagedBotToken {
+            let this = self;
+            $body!(get_managed_bot_token this (user_id: UserId))
+        }
+    };
+    (@method replace_managed_bot_token $body:ident $ty:ident) => {
+        type ReplaceManagedBotToken = $ty![ReplaceManagedBotToken];
+
+        fn replace_managed_bot_token(&self, user_id: UserId) -> Self::ReplaceManagedBotToken {
+            let this = self;
+            $body!(replace_managed_bot_token this (user_id: UserId))
+        }
+    };
+    (@method save_prepared_keyboard_button $body:ident $ty:ident) => {
+        type SavePreparedKeyboardButton = $ty![SavePreparedKeyboardButton];
+
+        fn save_prepared_keyboard_button(&self, user_id: UserId, button: KeyboardButton) -> Self::SavePreparedKeyboardButton {
+            let this = self;
+            $body!(save_prepared_keyboard_button this (user_id: UserId, button: KeyboardButton))
+        }
+    };
     (@method send_poll $body:ident $ty:ident) => {
         type SendPoll = $ty![SendPoll];
 

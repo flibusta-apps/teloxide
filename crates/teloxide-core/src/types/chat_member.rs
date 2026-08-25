@@ -744,6 +744,7 @@ mod tests {
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
                 allows_users_to_create_topics: false,
+                can_manage_bots: false,
             },
             kind: ChatMemberKind::Administrator(Administrator {
                 custom_title: None,
@@ -813,6 +814,7 @@ mod tests {
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
                 allows_users_to_create_topics: false,
+                can_manage_bots: false,
             },
             kind: ChatMemberKind::Restricted(Restricted {
                 is_member: true,

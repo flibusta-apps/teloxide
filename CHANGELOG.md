@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added support for Telegram Bot API 9.6
 - Added support for Telegram Bot API 9.5
 - Support for TBA 9.4, see [its changelog](crates/teloxide-core/CHANGELOG.md) for more information
 - Support for TBA 9.3, see [its changelog](crates/teloxide-core/CHANGELOG.md) for more information [**BC**]

@@ -38,10 +38,18 @@ impl_payload! {
             /// Poll type, “quiz” or “regular”, defaults to “regular”
             #[serde(rename = "type")]
             pub type_: PollType,
-            /// True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False
+            /// True, if the poll allows multiple answers, defaults to False
             pub allows_multiple_answers: bool,
-            /// 0-based identifier of the correct answer option, required for polls in quiz mode
-            pub correct_option_id: u8,
+            /// 0-based identifiers of the correct answer options, required for polls in quiz mode
+            pub correct_option_ids: Vec<u8> [collect],
+            /// Pass True if the poll allows to change the chosen answer options
+            pub allows_revoting: bool,
+            /// Pass True if the poll options must be shown in random order
+            pub shuffle_options: bool,
+            /// Pass True if answer options can be added to the poll after creation; not supported for anonymous polls and quizzes
+            pub allow_adding_options: bool,
+            /// Pass True if poll results must be shown only after the poll closes
+            pub hide_results_until_closes: bool,
             /// Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing
             pub explanation: String [into],
             /// Mode for parsing entities in the message text. See [formatting options] for more details.
@@ -50,9 +58,17 @@ impl_payload! {
             pub explanation_parse_mode: ParseMode,
             /// List of special entities that appear in the poll explanation, which can be specified instead of _parse\_mode_
             pub explanation_entities: Vec<MessageEntity> [collect],
-            /// Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with close_date.
+            /// Description of the poll to be sent, 0-1024 characters after entities parsing
+            pub description: String [into],
+            /// Mode for parsing entities in the poll description. See [formatting options] for more details.
+            ///
+            /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
+            pub description_parse_mode: ParseMode,
+            /// A JSON-serialized list of special entities that appear in the poll description, which can be specified instead of description_parse_mode
+            pub description_entities: Vec<MessageEntity> [collect],
+            /// Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with close_date.
             pub open_period: u16,
-            /// Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with open_period.
+            /// Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 2628000 seconds in the future. Can't be used together with open_period.
             #[serde(with = "crate::types::serde_opt_date_from_unix_timestamp")]
             pub close_date: DateTime<Utc> [into],
             /// Pass True, if the poll needs to be immediately closed. This can be useful for poll preview.

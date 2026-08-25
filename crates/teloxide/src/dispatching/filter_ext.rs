@@ -140,6 +140,9 @@ define_message_ext! {
     (filter_suggested_post_refunded, Message::suggested_post_refunded),
     (filter_gift_info, Message::gift_info),
     (filter_unique_gift_info, Message::unique_gift_info),
+    (filter_managed_bot_created, Message::managed_bot_created),
+    (filter_poll_option_added, Message::poll_option_added),
+    (filter_poll_option_deleted, Message::poll_option_deleted),
     (filter_video_chat_scheduled, Message::video_chat_scheduled),
     (filter_video_chat_started, Message::video_chat_started),
     (filter_video_chat_ended, Message::video_chat_ended),
@@ -188,4 +191,5 @@ define_update_ext! {
     (filter_chat_join_request, UpdateKind::ChatJoinRequest, ChatJoinRequest),
     (filter_chat_boost, UpdateKind::ChatBoost, ChatBoost),
     (filter_removed_chat_boost, UpdateKind::RemovedChatBoost, RemovedChatBoost),
+    (filter_managed_bot_updated, UpdateKind::ManagedBot, ManagedBot),
 }

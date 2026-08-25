@@ -79,6 +79,7 @@ mod tests {
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
                 allows_users_to_create_topics: false,
+                can_manage_bots: false,
             },
             can_join_groups: false,
             can_read_all_group_messages: false,

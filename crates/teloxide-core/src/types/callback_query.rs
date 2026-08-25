@@ -125,6 +125,7 @@ mod tests {
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
                 allows_users_to_create_topics: false,
+                can_manage_bots: false,
             },
             chat_instance: "123456".to_string(),
             message: None,

@@ -2,7 +2,7 @@ use serde::{de::Error, Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::types::{
     ButtonStyle, CustomEmojiId, KeyboardButtonPollType, KeyboardButtonRequestChat,
-    KeyboardButtonRequestUsers, True, WebAppInfo,
+    KeyboardButtonRequestManagedBot, KeyboardButtonRequestUsers, True, WebAppInfo,
 };
 
 /// This object represents one button of the reply keyboard.
@@ -92,6 +92,12 @@ pub enum ButtonRequest {
     #[cfg_attr(test, schemars(rename = "request_users"))]
     RequestUsers(KeyboardButtonRequestUsers),
 
+    /// If specified, pressing the button will ask the user to create and share
+    /// a bot that will be managed by the current bot. Available in private
+    /// chats only.
+    #[cfg_attr(test, schemars(rename = "request_managed_bot"))]
+    RequestManagedBot(KeyboardButtonRequestManagedBot),
+
     /// If this variant is used, the user will be asked to create a poll and
     /// send it to the bot when the button is pressed.
     ///
@@ -137,6 +143,11 @@ struct RawRequest {
     #[serde(rename = "request_users")]
     users: Option<KeyboardButtonRequestUsers>,
 
+    /// If specified, pressing the button will ask the user to create a managed
+    /// bot.
+    #[serde(rename = "request_managed_bot")]
+    managed_bot: Option<KeyboardButtonRequestManagedBot>,
+
     /// If specified, the user will be asked to create a poll and
     /// send it to the bot when the button is pressed. Available in private
     /// chats only.
@@ -156,11 +167,12 @@ impl<'de> Deserialize<'de> for ButtonRequest {
     {
         let raw = RawRequest::deserialize(deserializer)?;
         match raw {
-            RawRequest { contact, location, chat, users, poll, web_app }
+            RawRequest { contact, location, chat, users, managed_bot, poll, web_app }
                 if 1 < (contact.is_some() as u8
                     + location.is_some() as u8
                     + chat.is_some() as u8
                     + users.is_some() as u8
+                    + managed_bot.is_some() as u8
                     + poll.is_some() as u8
                     + web_app.is_some() as u8) =>
             {
@@ -173,6 +185,9 @@ impl<'de> Deserialize<'de> for ButtonRequest {
             RawRequest { location: Some(True), .. } => Ok(Self::Location),
             RawRequest { chat: Some(request_chat), .. } => Ok(Self::RequestChat(request_chat)),
             RawRequest { users: Some(request_users), .. } => Ok(Self::RequestUsers(request_users)),
+            RawRequest { managed_bot: Some(managed_bot), .. } => {
+                Ok(Self::RequestManagedBot(managed_bot))
+            }
             RawRequest { poll: Some(poll_type), .. } => Ok(Self::Poll(poll_type)),
             RawRequest { web_app: Some(web_app), .. } => Ok(Self::WebApp(web_app)),
 
@@ -181,6 +196,7 @@ impl<'de> Deserialize<'de> for ButtonRequest {
                 location: None,
                 chat: None,
                 users: None,
+                managed_bot: None,
                 poll: None,
                 web_app: None,
             } => Err(D::Error::custom(
@@ -201,6 +217,7 @@ impl Serialize for ButtonRequest {
             location: None,
             chat: None,
             users: None,
+            managed_bot: None,
             poll: None,
             web_app: None,
         };
@@ -210,6 +227,7 @@ impl Serialize for ButtonRequest {
             Self::Location => raw.location = Some(True),
             Self::RequestChat(request_chat) => raw.chat = Some(request_chat.clone()),
             Self::RequestUsers(request_users) => raw.users = Some(request_users.clone()),
+            Self::RequestManagedBot(managed_bot) => raw.managed_bot = Some(managed_bot.clone()),
             Self::Poll(poll_type) => raw.poll = Some(poll_type.clone()),
             Self::WebApp(web_app) => raw.web_app = Some(web_app.clone()),
         };

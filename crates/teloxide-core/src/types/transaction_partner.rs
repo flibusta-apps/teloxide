@@ -256,6 +256,7 @@ mod tests {
                 added_to_attachment_menu: false,
                 has_topics_enabled: false,
                 allows_users_to_create_topics: false,
+                can_manage_bots: false,
             },
             kind: TransactionPartnerUserKind::PremiumPurchase(
                 TransactionPartnerUserPremiumPurchase { premium_subscription_duration: Some(1) },
