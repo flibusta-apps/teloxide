@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-08-26T00:00:00.000Z",
+  "dependencies": [
+    {
+      "name": "aiogram Bot API 10.2 schema",
+      "resolvedVersion": "Bot API 10.2",
+      "repoUrl": "https://github.com/aiogram/aiogram.git",
+      "ref": "191a6d242211aa119624f23c03893939af6d2234",
+      "path": ".slim/clonedeps/repos/aiogram__aiogram",
+      "packagePath": ".butcher/schema",
+      "reason": "Pinned clean Bot API 10.2 schema for reconstructing teloxide's checker artifact."
+    }
+  ]
+}
