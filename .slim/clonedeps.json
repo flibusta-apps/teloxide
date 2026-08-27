@@ -10,6 +10,15 @@
       "path": ".slim/clonedeps/repos/aiogram__aiogram",
       "packagePath": ".butcher/schema",
       "reason": "Pinned clean Bot API 10.2 schema for reconstructing teloxide's checker artifact."
+    },
+    {
+      "name": "tba-parser",
+      "resolvedVersion": "b28b23b983ddd9ae616e699f2b3792c833bc9868",
+      "repoUrl": "https://github.com/teloxide/tba-parser.git",
+      "ref": "b28b23b983ddd9ae616e699f2b3792c833bc9868",
+      "path": ".slim/clonedeps/repos/teloxide__tba-parser",
+      "packagePath": ".",
+      "reason": "Pinned parser used to generate the Bot API 10.3 checker schema from Telegram's official reference."
     }
   ]
 }
